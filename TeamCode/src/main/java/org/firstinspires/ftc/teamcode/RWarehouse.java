@@ -20,7 +20,10 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class RWarehouse extends LinearOpMode {
 
     static final int MOTOR_TICK_COUNTS = 751;
-//inizitialize
+
+
+
+    //inizitialize
 
 
     Servo bucket;
@@ -79,6 +82,7 @@ public class RWarehouse extends LinearOpMode {
         double circumference7 = 3.14*3.70 ; // pi*diameter = circumference
         double rotationsNeeded7 = -17.427/circumference7;
         int encoderDrivingTarget7 = (int)(rotationsNeeded7*751);
+
 
 // set the target positions
 
@@ -202,10 +206,6 @@ public class RWarehouse extends LinearOpMode {
 
 
 
-        left_drive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        right_drive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        back_right_drive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        back_left_drive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
 
 
@@ -217,11 +217,8 @@ public class RWarehouse extends LinearOpMode {
         back_left_drive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
 
-
-        double circumference2 = 3.14*3.70 ; // pi*diameter = circumference
-        double rotationsNeeded2 = -4/circumference2;
+        double rotationsNeeded2 = -4/circumference;
         int encoderDrivingTarget2 = (int)(rotationsNeeded2*751);
-
 
 
         left_drive.setTargetPosition(encoderDrivingTarget2);
@@ -229,18 +226,14 @@ public class RWarehouse extends LinearOpMode {
         back_right_drive.setTargetPosition(encoderDrivingTarget2);
         back_left_drive.setTargetPosition(encoderDrivingTarget2);
 
-
 // set the power for the motors
-
         left_drive.setPower(0.25);
         right_drive.setPower(0.25);
         back_right_drive.setPower(0.25);
         back_left_drive.setPower(0.25);
 
-
 //set the motors to RUN_TO_POSITIO
-//
-//
+
         left_drive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         right_drive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         back_right_drive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -316,49 +309,60 @@ public class RWarehouse extends LinearOpMode {
 
 
 
+        drive_fwd_encoder(46.472, 0.75, "fwd");
 
 
 
-        double circumference5 = 3.14*3.70 ; // pi*diameter = circumference
-        double rotationsNeeded5 = -46.472/circumference5;
-        int encoderDrivingTarget5 = (int)(rotationsNeeded5*751);
+        telemetry.addData("Path", "IN WAREHOUSE");
+        telemetry.update();
+
+        drive_fwd_encoder(6, 0.75, "fwd");
+    }
+    int drive_fwd_encoder(double distance, double speed, String direction ) {
+
+        double circumference = 11.618;
+        double rotationsNeeded = distance/circumference;
+        int dir = 0;
+
+        if (direction == "fwd") {
+            dir = -1;
+        }
+        else if (direction == "bk"){
+            dir = 1;
+        }
+
+        int encoderTarget = (int) (dir * rotationsNeeded*751);
 
 
+        left_drive.setTargetPosition(encoderTarget);
+        right_drive.setTargetPosition(encoderTarget);
+        back_right_drive.setTargetPosition(encoderTarget);
+        back_left_drive.setTargetPosition(encoderTarget);
 
-        left_drive.setTargetPosition(encoderDrivingTarget5);
-        right_drive.setTargetPosition(encoderDrivingTarget5);
-        back_right_drive.setTargetPosition(encoderDrivingTarget5);
-        back_left_drive.setTargetPosition(encoderDrivingTarget5);
-
-
-
-
-        left_drive.setPower(0.75);
-        right_drive.setPower(0.75);
-        back_right_drive.setPower(0.75);
-        back_left_drive.setPower(0.75);
-
-
+        left_drive.setPower(speed);
+        right_drive.setPower(speed);
+        back_right_drive.setPower(speed);
+        back_left_drive.setPower(speed);
 
         left_drive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         right_drive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         back_right_drive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         back_left_drive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-
         while (left_drive.isBusy() && back_right_drive.isBusy() && right_drive.isBusy() && back_left_drive.isBusy()) {
         }
+
+        left_drive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        right_drive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        back_right_drive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        back_left_drive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         left_drive.setPower(0);
         right_drive.setPower(0);
         back_right_drive.setPower(0);
         back_left_drive.setPower(0);
 
-
-        telemetry.addData("Path", "IN WAREHOUSE");
-        telemetry.update();
+        return(0);
     }
-
-
 }
 

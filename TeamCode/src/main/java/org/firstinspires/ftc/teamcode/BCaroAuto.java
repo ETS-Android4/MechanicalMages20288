@@ -16,7 +16,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 
 
-@Autonomous(name="BCaroAuto", group = "auto")
+@Autonomous(name="BackupCaroAuto", group = "auto")
 public class BCaroAuto extends LinearOpMode {
 
     static final int MOTOR_TICK_COUNTS = 751;
@@ -57,6 +57,8 @@ public class BCaroAuto extends LinearOpMode {
         waitForStart();
 
         bucket.setPosition(.5);
+
+
 
         left_drive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         right_drive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -229,7 +231,7 @@ public class BCaroAuto extends LinearOpMode {
         Slide.setPower(0);
 
         double circumference5 = 3.14 * 3.70; // pi*diameter = circumference
-        double rotationsNeeded5 = -19.7506 / circumference5;
+        double rotationsNeeded5 = -4 / circumference5;
         int encoderDrivingTarget5 = (int) (rotationsNeeded5 * 751);
 
 
@@ -327,36 +329,23 @@ public class BCaroAuto extends LinearOpMode {
         back_right_drive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         back_left_drive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        Caro.setPower(-0.75); //3/4's speed (right carousal)
-        sleep(5000);
-        Caro.setPower(0);
-
-        double circumference11 = 3.14*3.70 ; // pi*diameter = circumference
-        double rotationsNeeded11 = 15.1034/circumference11;
-        int encoderDrivingTarget11 = (int)(rotationsNeeded11*751);
-        double circumference12 = 3.14*3.70 ; // pi*diameter = circumference
-        double rotationsNeeded12 = -15.1034/circumference12;
-        int encoderDrivingTarget12 = (int)(rotationsNeeded12*751);
-
-// set the target positions
-
-        left_drive.setTargetPosition(encoderDrivingTarget12);
-        right_drive.setTargetPosition(encoderDrivingTarget11);
-        back_right_drive.setTargetPosition(encoderDrivingTarget12);
-        back_left_drive.setTargetPosition(encoderDrivingTarget11);
+        double circumference16 = 3.14 * 3.70; // pi*diameter = circumference
+        double rotationsNeeded16 = -4 / circumference16;
+        int encoderDrivingTarget16 = (int) (rotationsNeeded16 * 751);
 
 
-// set the power for the motors
-
-        left_drive.setPower(.4);
-        right_drive.setPower(.4);
-        back_right_drive.setPower(.4);
-        back_left_drive.setPower(.4);
+        left_drive.setTargetPosition(encoderDrivingTarget16);
+        right_drive.setTargetPosition(encoderDrivingTarget16);
+        back_right_drive.setTargetPosition(encoderDrivingTarget16);
+        back_left_drive.setTargetPosition(encoderDrivingTarget16);
 
 
-//set the motors to RUN_TO_POSITION
-//
-//
+        left_drive.setPower(0.25);
+        right_drive.setPower(0.25);
+        back_right_drive.setPower(0.25);
+        back_left_drive.setPower(0.25);
+
+
         left_drive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         right_drive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         back_right_drive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -365,10 +354,100 @@ public class BCaroAuto extends LinearOpMode {
 
         while (left_drive.isBusy() && back_right_drive.isBusy() && right_drive.isBusy() && back_left_drive.isBusy()) {
         }
+
+        left_drive.setPower(0);
+        right_drive.setPower(0);
+        back_right_drive.setPower(0);
+        back_left_drive.setPower(0);
+
+
+        left_drive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        right_drive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        back_right_drive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        back_left_drive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        double circumference25 = 3.14 * 3.70; // pi*diameter = circumference
+        double rotationsNeeded25 = -11 / circumference25;
+        int encoderDrivingTarget25 = (int) (rotationsNeeded25 * 751);
+
+
+        left_drive.setTargetPosition(encoderDrivingTarget25);
+        right_drive.setTargetPosition(encoderDrivingTarget25);
+        back_right_drive.setTargetPosition(encoderDrivingTarget25);
+        back_left_drive.setTargetPosition(encoderDrivingTarget25);
+
+
+        left_drive.setPower(-0.25);
+        right_drive.setPower(0.25);
+        back_right_drive.setPower(0.25);
+        back_left_drive.setPower(-0.25);
+
+
+        left_drive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        right_drive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        back_right_drive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        back_left_drive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+
+        while (left_drive.isBusy() && back_right_drive.isBusy() && right_drive.isBusy() && back_left_drive.isBusy()) {
+        }
+
+        left_drive.setPower(0);
+        right_drive.setPower(0);
+        back_right_drive.setPower(0);
+        back_left_drive.setPower(0);
+
+
+        left_drive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        right_drive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        back_right_drive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        back_left_drive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+
+        double circumference51 = 3.14 * 3.70; // pi*diameter = circumference
+        double rotationsNeeded51 = 11 / circumference51;
+        int encoderDrivingTarget51 = (int) (rotationsNeeded51 * 751);
+
+
+        left_drive.setTargetPosition(encoderDrivingTarget51);
+        right_drive.setTargetPosition(encoderDrivingTarget51);
+        back_right_drive.setTargetPosition(encoderDrivingTarget51);
+        back_left_drive.setTargetPosition(encoderDrivingTarget51);
+
+
+        left_drive.setPower(-0.25);
+        right_drive.setPower(0.25);
+        back_right_drive.setPower(0.25);
+        back_left_drive.setPower(-0.25);
+
+
+        left_drive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        right_drive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        back_right_drive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        back_left_drive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+
+        while (left_drive.isBusy() && back_right_drive.isBusy() && right_drive.isBusy() && back_left_drive.isBusy()) {
+        }
+
+        left_drive.setPower(0);
+        right_drive.setPower(0);
+        back_right_drive.setPower(0);
+        back_left_drive.setPower(0);
+
+
+        left_drive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        right_drive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        back_right_drive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        back_left_drive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+
+
+
 //wait for robot to execute its rout
 //see what stage the robot is in
 
-        telemetry.addData("Path", "Driving 2 feet");
+        telemetry.addData("Path", "Parking in Storage Unit");
         telemetry.update();
 
 

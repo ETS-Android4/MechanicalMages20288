@@ -15,6 +15,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 @TeleOp(name = "MecanumDrive", group = "TeleOp")
 
 public class MecanumDrive extends OpMode {
+
     static final int MOTOR_TICK_COUNTS = 751;
 
     Servo bucket;
@@ -27,6 +28,7 @@ public class MecanumDrive extends OpMode {
     DcMotor Caro;
 
 
+    double down;
     double left_drivePower;
     double right_drivePower;
     double back_right_drivePower;
@@ -46,6 +48,8 @@ public class MecanumDrive extends OpMode {
         bucket = hardwareMap.servo.get("bucket");
         Slide = hardwareMap.dcMotor.get("Slide");
         Caro = hardwareMap.dcMotor.get("Caro");
+
+        Slide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
     @Override
@@ -67,8 +71,11 @@ public class MecanumDrive extends OpMode {
         boolean rightbumper = gamepad1.right_bumper;
         boolean leftbumper = gamepad1.left_bumper;
         //attachments
-        boolean leftbumper1 = gamepad2.left_bumper;
-        boolean rightbumper1 = gamepad2.right_bumper;
+        boolean down = gamepad2.left_bumper;
+        boolean up = gamepad2.right_bumper;
+
+        float brake = gamepad2.right_trigger;
+
 
         //boolean rightBumper = gamepad2.right_bumper;
         if (leftbumper) {
@@ -100,44 +107,67 @@ public class MecanumDrive extends OpMode {
         telemetry.addData("Encoder value", Slide.getCurrentPosition());
         telemetry.update();
 
-         /* if (rightbumper) {
+          /* if (rightbumper) {
             Slide.setPower(0.5);
             Slide.getCurrentPosition(); */
 
-            /*
-        } if (rightbumper) {
-           Intake.setPower(-1);
-        } else if (rightbumper) {
-            Intake.setPower(0);
-        }  */
-
-            if (rightbumper1) {
-                Slide.setPower(0.5);
-                Slide.getCurrentPosition();
-                telemetry.update();
 
 
-            } else if (leftbumper1) {
-                Slide.setPower(-0.5);
-                Slide.getCurrentPosition();
-            } else {
-                Slide.setPower(0);
+
+
+        if (up) {
+            Slide.setPower(0.35);
+            Slide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            telemetry.addData("Slide", Slide.getCurrentPosition());
+            telemetry.update();
+            try {
+                Thread.sleep(150);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
+            bucket.setPosition(.4);
+        } else {
+            Slide.setPower(0);
+        }
 
 
-            if (gamepad2.x) {
-                bucket.setPosition(0.05);
-            } else if (rightbumper1) {
+
+        /*if (Slide.getCurrentPosition() < (-500)) {
+            bucket.setPosition(.6);
+        } */
+
+
+        if (down) {
+            Slide.setPower(-0.5);
+            Slide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            telemetry.addData("Slide", Slide.getCurrentPosition());
+            telemetry.update();
+            bucket.setPosition(.78);
+
+        } else {
+            Slide.setPower(0);
+        }
+
+        /*if (Slide.getCurrentPosition() > (-500))
+
+            bucket.setPosition(.8); */
+
+        if (gamepad2.x) {
+            bucket.setPosition(-.2);
+
+            /* } else if (up) {
                 try {
                     Thread.sleep(150);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
                 bucket.setPosition(.5);
-            } else if (leftbumper1) {
-                bucket.setPosition(.80);
+            } else if (down) {
+                bucket.setPosition(.80); */
 
 
-            }
         }
+
     }
+}
+

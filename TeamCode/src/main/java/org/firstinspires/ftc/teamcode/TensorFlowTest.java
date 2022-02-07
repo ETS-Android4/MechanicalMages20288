@@ -131,7 +131,7 @@ public class TensorFlowTest extends LinearOpMode {
             // to artificially zoom in to the center of image.  For best results, the "aspectRatio" argument
             // should be set to the value of the images used to create the TensorFlow Object Detection model
             // (typically 16/9).
-            tfod.setZoom(1, 16.0/9.0);
+            tfod.setZoom(1.3, 16.0/9.0);
         }
 
         /** Wait for the game to begin */
@@ -139,12 +139,15 @@ public class TensorFlowTest extends LinearOpMode {
         telemetry.update();
         waitForStart();
 
+        int slidePos = 0;
+
         if (opModeIsActive()) {
             while (opModeIsActive()) {
                 if (tfod != null) {
                     // getUpdatedRecognitions() will return null if no new information is available since
                     // the last time that call was made.
                     List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+
                     if (updatedRecognitions != null) {
                         telemetry.addData("# Object Detected", updatedRecognitions.size());
                         // step through the list of recognitions and display boundary info.
@@ -155,9 +158,33 @@ public class TensorFlowTest extends LinearOpMode {
                                     recognition.getLeft(), recognition.getTop());
                             telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
                                     recognition.getRight(), recognition.getBottom());
+
+                            if (recognition.getLabel().equals("Cube")) {
+                                int TSEpos = (int) recognition.getRight();
+                                if (TSEpos <= 900 && TSEpos >= 600) {
+                                    slidePos = 3;
+                                } else if (TSEpos <= 550 && TSEpos >= 350) {
+                                    slidePos = 2;
+                                } else if (TSEpos <= 300 && TSEpos >= 0)
+                                    slidePos = 1;
+                                }
+
+                            if (recognition.getLabel().equals("Cube")) {
+                                int cubeRtX = (int) recognition.getRight();
+                                if (cubeRtX <= 730 && cubeRtX >= 600) {
+                                    slidePos = 3;
+                                } else if (cubeRtX <= 550 && cubeRtX >= 350) {
+                                    slidePos = 2;
+                                } else if (cubeRtX <= 300 && cubeRtX >= 0)
+                                    slidePos = 1;
+                            }
+
+                            telemetry.addData("slidePos is", slidePos);
+                            telemetry.update();
+
                             i++;
                         }
-                        telemetry.update();
+
                     }
                 }
             }
@@ -189,12 +216,12 @@ public class TensorFlowTest extends LinearOpMode {
         int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
                 "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
-        tfodParameters.minResultConfidence = 0.7f;
+        tfodParameters.minResultConfidence = 0.6f;
         tfodParameters.isModelTensorFlow2 = true;
-        tfodParameters.inputSize = 320;
+        tfodParameters.inputSize = 1080;
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABELS);
-    }
 
+    }
 
 }
