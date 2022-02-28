@@ -1,12 +1,13 @@
-package org.firstinspires.ftc.robotcontroller.external.samples;
+package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcontroller.external.samples.SensorREV2mDistance;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 /**
@@ -20,11 +21,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
  *
  * @see <a href="http://revrobotics.com">REV Robotics Web Page</a>
  */
+@TeleOp(name = " REV2mDistance_Sensor_Test", group = "auto")
 
-//EDITED BY KRRISH I MADE THIS IN LIKE JANUARY
-@TeleOp(name = " Distance", group = "auto")
-
-public class Distance extends LinearOpMode {
+public class REV2mDistance_Sensor_Test extends LinearOpMode {
 
     Servo bucket;
     DcMotor right_drive;
@@ -65,21 +64,15 @@ public class Distance extends LinearOpMode {
         waitForStart();
         while(opModeIsActive()) {
 
-            if ( sensorRange.getDistance(DistanceUnit.INCH) > 4.1){
-                left_drive.setPower(-.25);
-                right_drive.setPower(-.25);
-                back_left_drive.setPower(-.25);
-                back_right_drive.setPower(-.25);
+            if ( sensorRange.getDistance(DistanceUnit.INCH) > 10){
+                telemetry.addData(">>", "Distance is greater than 10 inches");
+                telemetry.update();
             }
-            else if ( sensorRange.getDistance(DistanceUnit.INCH) <=4.1 ) {
-                left_drive.setPower(0);
-                right_drive.setPower(0);
-                back_left_drive.setPower(0);
-                back_right_drive.setPower(0);
+            else if ( sensorRange.getDistance(DistanceUnit.INCH) <= 10 ) {
+                telemetry.addData(">>", "Distance is less than 10 inches");
+                telemetry.update();
 
-                Caro.setPower(-0.5); //3/4's speed (right carousal)
-                sleep(5000);
-                Caro.setPower(0);
+
             }
 
 
