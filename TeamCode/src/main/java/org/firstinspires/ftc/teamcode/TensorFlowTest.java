@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import android.util.Log;
+
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -10,6 +12,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 
 /* Copyright (c) 2019 FIRST. All rights reserved.
@@ -49,7 +54,9 @@ import java.util.List;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import java.util.List;
-        import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import java.util.Set;
+
+import org.firstinspires.ftc.robotcore.external.ClassFactory;
         import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
         import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
         import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
@@ -135,6 +142,22 @@ public class TensorFlowTest extends LinearOpMode {
          * Activate TensorFlow Object Detection before we wait for the start command.
          * Do it here so that the Camera Stream window will have the TensorFlow annotations visible.
          **/
+        List<Integer> SlideLevelList = Arrays.asList();
+
+        waitForStart();
+
+        while(opModeIsActive()) {
+
+
+
+            // Display the current value
+            //telemetry.addData("Motor Power", "%5.2f", power);
+            telemetry.addData(">", "Press Stop to end test." );
+            telemetry.update();
+        }
+
+        telemetry.addData(">", "Done");
+        telemetry.update();
 
         telemetry.addData(">", "Waiting 5s to initialize tensorflow");
         telemetry.update();
@@ -153,43 +176,58 @@ public class TensorFlowTest extends LinearOpMode {
 
         sleep (5000);
 
-        if (tfod != null) {
-            // getUpdatedRecognitions() will return null if no new information is available since
-            // the last time that call was made.
-            List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+        // Loop ten times and detect TSE
+        for (int j = 0; j < 10; j++) {
+            if (tfod != null) {
+                // getUpdatedRecognitions() will return null if no new information is available since
+                // the last time that call was made.
+                List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
 
-            if (updatedRecognitions != null) {
-                telemetry.addData("# Object Detected", updatedRecognitions.size());
-                // step through the list of recognitions and display boundary info.
-                int i = 0;
-                for (Recognition recognition : updatedRecognitions) {
-                    telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
-                    telemetry.addData(String.format("  left,top (%d)", i), "%.03f , %.03f",
-                            recognition.getLeft(), recognition.getTop());
-                    telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
-                            recognition.getRight(), recognition.getBottom());
+                if (updatedRecognitions != null) {
+                    telemetry.addData("# Object Detected", updatedRecognitions.size());
+                    // step through the list of recognitions and display boundary info.
+                    int i = 0;
+                    for (Recognition recognition : updatedRecognitions) {
+                        telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
+                        telemetry.addData(String.format("  left,top (%d)", i), "%.03f , %.03f",
+                                recognition.getLeft(), recognition.getTop());
+                        telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
+                                recognition.getRight(), recognition.getBottom());
 
-                    if (recognition.getLabel().equals("TSE")) {
-                        int TSEpos = (int) recognition.getRight();
-                        if (TSEpos <= 900 && TSEpos >= 600) {
-                            slidePos = 3;
-                        } else if (TSEpos <= 550 && TSEpos >= 350) {
-                            slidePos = 2;
-                        } else if (TSEpos <= 300 && TSEpos >= 0)
+                        if (recognition.getLabel().equals("TSE")) {
+                            int TSEpos = (int) recognition.getRight();
+                            if (TSEpos <= 900 && TSEpos >= 600) {
+                                slidePos = 3;
+                            } else if (TSEpos <= 550 && TSEpos >= 350) {
+                                slidePos = 2;
+                            } else if (TSEpos <= 300 && TSEpos >= 0)
+                                slidePos = 1;
+                        } else {
                             slidePos = 1;
-                    } else {
-                        slidePos = 1;
+                        }
                     }
+
+                    telemetry.addData("slidePos is", slidePos);
+                    //telemetry.update();
+
+                    i++;
                 }
-
-                telemetry.addData("slidePos is", slidePos);
-                //telemetry.update();
-
-                i++;
+                //Insert into the list
+                SlideLevelList.add(slidePos);
             }
-        }
+        } // end of multiple detection for loop
 
+        Log.d("FTC_20288", "Count all with frequency");
+        Set<Integer> set = new HashSet<Integer>(SlideLevelList);
+        /*for (Integer r : set) {
+            Log.d("FTC_20288", (r + ": " + Collections.frequency(SlideLevelList, r)));
+            int LevelCount = Collections.frequency(SlideLevelList, r);
 
+        }*/
+        int Level1Count = Collections.frequency(SlideLevelList, 1);
+        int Level2Count = Collections.frequency(SlideLevelList, 2);
+        int Level3Count = Collections.frequency(SlideLevelList, 3);
+        Log.d("FTC_20288", (slideLevel1 + ": " + slideLevel2 + ": " + slideLevel3));
 
         /** Wait for the game to begin */
         telemetry.addData(">", "Press Play to start op mode");
